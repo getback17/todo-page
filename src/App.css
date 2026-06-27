@@ -253,6 +253,8 @@ body {
   background: var(--task-bg);
   border-radius: 8px;
   transition: background 0.2s, transform 0.1s;
+  border: none;
+  outline: none;
 }
 
 .task-list li:hover {
@@ -266,10 +268,24 @@ body {
   cursor: pointer;
 }
 
-.task-content span:first-child {
+.task-text {
+  background: none;
+  border: none;
+  padding: 0;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
   font-size: 1rem;
   color: var(--text-primary);
+  text-align: left;
+  flex: 1;
   overflow-wrap: break-word;
+}
+
+.task-text:focus-visible {
+  outline: 2px solid var(--input-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .task-date {
@@ -278,7 +294,7 @@ body {
   margin-top: 4px;
 }
 
-.task-list li.completed .task-content span:first-child {
+.task-list li.completed .task-text {
   text-decoration: line-through;
   color: var(--task-completed);
 }
@@ -341,5 +357,3 @@ body {
     gap: 4px;
   }
 }
-
-/* Для проверки Sonar :D */

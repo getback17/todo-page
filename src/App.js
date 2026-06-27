@@ -51,6 +51,7 @@ function App() {
         return [];
       }
     } catch (error) {
+      console.error('Error reading tasks from localStorage:', error);
       localStorage.removeItem('tasks');
       return [];
     }
@@ -70,13 +71,14 @@ function App() {
         localStorage.removeItem('tasks');
       }
     } catch (error) {
+      console.error('Error saving tasks to localStorage:', error);
       localStorage.removeItem('tasks');
     }
   }, [tasks]);
 
   useEffect(() => {
     localStorage.setItem('theme', theme);
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.dataset.theme = theme;
   }, [theme]);
 
   useEffect(() => {
