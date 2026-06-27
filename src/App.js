@@ -40,12 +40,8 @@ const translations = {
 
 function App() {
   const [tasks, setTasks] = useState(() => {
-    try {
-      const saved = localStorage.getItem('tasks');
-      return saved ? JSON.parse(saved) : [];
-    } catch (error) {
-      return [];
-    }
+    const saved = localStorage.getItem('tasks');
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [input, setInput] = useState('');
@@ -54,16 +50,12 @@ function App() {
   const t = translations[locale];
 
   useEffect(() => {
-    try {
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-    } catch (error) {
-      // ignore
-    }
+    localStorage.setItem('tasks', JSON.stringify(tasks));
   }, [tasks]);
 
   useEffect(() => {
     localStorage.setItem('theme', theme);
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.dataset.theme = theme;
   }, [theme]);
 
   useEffect(() => {
@@ -173,7 +165,6 @@ function App() {
                     className="task-text"
                     onClick={() => toggleTask(task.id)}
                     onKeyDown={(e) => e.key === 'Enter' && toggleTask(task.id)}
-                    role="button"
                     tabIndex="0"
                   >
                     {task.text}
