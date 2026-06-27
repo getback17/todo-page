@@ -39,23 +39,44 @@ const translations = {
 };
 
 function App() {
-  const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem('tasks');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const getInitialTasks = () => {
+    try {
+      const saved = localStorage.getItem('tasks');
+      if (!saved) return [];
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      } else {
+        localStorage.removeItem('tasks');
+        return [];
+      }
+    } catch (error) {
+      localStorage.removeItem('tasks');
+      return [];
+    }
+  };
 
+  const [tasks, setTasks] = useState(getInitialTasks);
   const [input, setInput] = useState('');
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
   const [locale, setLocale] = useState(() => localStorage.getItem('locale') || 'ru');
   const t = translations[locale];
 
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    try {
+      if (Array.isArray(tasks)) {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+      } else {
+        localStorage.removeItem('tasks');
+      }
+    } catch (error) {
+      localStorage.removeItem('tasks');
+    }
   }, [tasks]);
 
   useEffect(() => {
     localStorage.setItem('theme', theme);
-    document.documentElement.dataset.theme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
   useEffect(() => {
