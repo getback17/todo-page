@@ -269,7 +269,7 @@ body {
 .task-content span:first-child {
   font-size: 1rem;
   color: var(--text-primary);
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .task-date {

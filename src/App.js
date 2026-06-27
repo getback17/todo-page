@@ -40,16 +40,25 @@ const translations = {
 
 function App() {
   const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem('tasks');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('tasks');
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      return [];
+    }
   });
+
   const [input, setInput] = useState('');
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
   const [locale, setLocale] = useState(() => localStorage.getItem('locale') || 'ru');
   const t = translations[locale];
 
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    try {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    } catch (error) {
+      // ignore
+    }
   }, [tasks]);
 
   useEffect(() => {
@@ -160,7 +169,15 @@ function App() {
             {tasks.map((task) => (
               <li key={task.id} className={task.completed ? 'completed' : ''}>
                 <div className="task-content">
-                  <span onClick={() => toggleTask(task.id)}>{task.text}</span>
+                  <button
+                    className="task-text"
+                    onClick={() => toggleTask(task.id)}
+                    onKeyDown={(e) => e.key === 'Enter' && toggleTask(task.id)}
+                    role="button"
+                    tabIndex="0"
+                  >
+                    {task.text}
+                  </button>
                   <span className="task-date">{t.added} {task.createdAt}</span>
                 </div>
                 <button className="delete-btn" onClick={() => deleteTask(task.id)}>
